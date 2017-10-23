@@ -1,0 +1,3 @@
+clase
+ordenador
+teclado
