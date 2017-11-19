@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import Libro.*;
 import model.*;
+import Libro.Libro;
 import view.*;
 
 public class GestionEventos {
@@ -19,7 +20,7 @@ public class GestionEventos {
 	private GestionDatos model;
 	private LaunchView view;
 	private ActionListener actionListener_comparar, actionListener_buscar, actionListener_copiar, actionListener_enviar,
-			actionListener_recu, actionListener_mostrar;
+			actionListener_recu, actionListener_mostrar, actionListener_modificar, actionListener_longitud;
 
 	public GestionEventos(GestionDatos model, LaunchView view) {
 		this.model = model;
@@ -89,7 +90,6 @@ public class GestionEventos {
 		// ------------------------------------
 		actionListener_recu = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				// TODO: Llamar a la funcion call_compararContenido
 				try {
 					recuperarLibro();
 				} catch (FileNotFoundException e) {
@@ -106,7 +106,6 @@ public class GestionEventos {
 		// ------------------------------------
 		actionListener_mostrar = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				// TODO: Llamar a la funcion call_compararContenido
 				try {
 					listarLibros();
 				} catch (FileNotFoundException e) {
@@ -119,6 +118,38 @@ public class GestionEventos {
 			}
 		};
 		view.getBtn_MostrarLibros().addActionListener(actionListener_mostrar);
+		// ------------------------------------
+		actionListener_modificar = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				try {
+					// call_modificarPaginas();
+					call_modificarTitulo();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		view.getBtn_ModificarPags().addActionListener(actionListener_modificar);
+		// ------------------------------------
+		actionListener_longitud = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				try {
+					call_longitud();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		view.getBtnLongitud().addActionListener(actionListener_longitud);
 	}
 
 	private int call_compararContenido() throws FileNotFoundException, IOException {
@@ -219,4 +250,182 @@ public class GestionEventos {
 		return 0;
 
 	}
+
+	// #EJ1 Metodo del cambio de año del libro
+	private int call_modificarPaginas() throws IOException {
+
+		// Recuperamos el libro
+		Libro libroRecuperado = null;
+		String añoAnterior = null;
+		boolean recuperado = false;
+		try {
+			// Obten el libro del fichero
+			libroRecuperado = model.recuperar_Libro(view.getTxt_id().getText());
+			// Obten el año al que estaba anteriormente
+			añoAnterior = libroRecuperado.getAño_publicacion();
+			// Establece la recuperacion como conseguida
+			recuperado = true;
+		} catch (Exception e) {
+			// Si no se ha podido recuperar, marcalo como false y muestra el
+			// error
+			view.showError("Error al intentar recuperar el libro con ID " + view.getTxt_id().getText());
+			recuperado = false;
+		}
+
+		if (recuperado) {
+			// Comprobamos que el libro se ha recuperado
+			if (libroRecuperado != null) {
+				// Se ha recuperado el libro
+				view.getTextArea().setText("Libro recuperado...");
+				view.getTextArea().setText(libroRecuperado.mostrarDatos());
+
+				// Procedemos a eliminar el anterior libro
+				int estado = model.eliminarLibro(libroRecuperado);
+
+				switch (estado) {
+				case -3:
+					view.showError("Error ya que no existe el libro");
+					break;
+				case -2:
+					view.showError("Error al intentar eliminar el fichero anterior");
+					break;
+				}
+
+			} else {
+				view.showError("Se ha producido un error al intentar recuperar el libro con el ID: "
+						+ view.getTxt_id().getText());
+			}
+
+			// Cambiamos al nuevo año
+			libroRecuperado.setAño_publicacion(view.getTxt_nuevo().getText());
+
+			// Procedemos a escribir nuevo libro
+			int estado = model.guardar_libro(libroRecuperado);
+
+			// Mostramos datos nuevo libro
+			view.getTextArea().setText("Cambiando año...");
+			view.getTextArea().setText(libroRecuperado.mostrarDatos());
+
+			// Errores
+			if (estado != 1) {
+				// Se ha producido algun error
+				switch (estado) {
+				case -1:
+					view.showError("Se ha producido un error desconocido");
+					break;
+				case -2:
+					view.showError("Ya existe un libro con el mismo ID");
+					break;
+				}
+			} else {
+				view.getTextArea().setText(
+						"Se ha cambiado el año " + añoAnterior + " al año " + libroRecuperado.getAño_publicacion());
+			}
+
+		}
+
+		return 1;
+	}
+
+	// #EJ1 Metodo del cambio de año del libro
+	private int call_modificarTitulo() throws IOException {
+
+		// Recuperamos el libro
+		Libro libroRecuperado = null;
+		String tituloAnterior = null;
+		boolean recuperado = false;
+		try {
+			// Obten el libro del fichero
+			libroRecuperado = model.recuperar_Libro(view.getTxt_id().getText());
+			// Obten el año al que estaba anteriormente
+			tituloAnterior = libroRecuperado.getTitulo();
+			// Establece la recuperacion como conseguida
+			recuperado = true;
+		} catch (Exception e) {
+			// Si no se ha podido recuperar, marcalo como false y muestra el
+			// error
+			view.showError("Error al intentar recuperar el libro con ID " + view.getTxt_id().getText());
+			recuperado = false;
+		}
+
+		if (recuperado) {
+			// Comprobamos que el libro se ha recuperado
+			if (libroRecuperado != null) {
+				// Se ha recuperado el libro
+				view.getTextArea().setText("Libro recuperado...");
+				view.getTextArea().setText(libroRecuperado.mostrarDatos());
+
+				// Procedemos a eliminar el anterior libro
+				int estado = model.eliminarLibro(libroRecuperado);
+
+				switch (estado) {
+				case -3:
+					view.showError("Error ya que no existe el libro");
+					break;
+				case -2:
+					view.showError("Error al intentar eliminar el fichero anterior");
+					break;
+				}
+
+			} else {
+				view.showError("Se ha producido un error al intentar recuperar el libro con el ID: "
+						+ view.getTxt_id().getText());
+			}
+
+			// Cambiamos al nuevo titulo
+			libroRecuperado.setTitulo(view.getTxt_nuevo().getText());
+
+			// Procedemos a escribir nuevo libro
+			int estado = model.guardar_libro(libroRecuperado);
+
+			// Mostramos datos nuevo libro
+			view.getTextArea().setText("Cambiando titulo...");
+			view.getTextArea().setText(libroRecuperado.mostrarDatos());
+
+			// Errores
+			if (estado != 1) {
+				// Se ha producido algun error
+				switch (estado) {
+				case -1:
+					view.showError("Se ha producido un error desconocido");
+					break;
+				case -2:
+					view.showError("Ya existe un libro con el mismo ID");
+					break;
+				}
+			} else {
+				view.getTextArea().setText(
+						"Se ha cambiado el título " + tituloAnterior + " al año " + libroRecuperado.getTitulo());
+			}
+
+		}
+
+		return 1;
+	}
+
+	// #EJ2 Metodo para leer x numero de palabras
+	private int call_longitud() throws IOException {
+		int longitud = 0;
+		try {
+			longitud = Integer.parseInt(view.getTxt_long().getText());
+		} catch (Exception e) {
+			// No ha introducido un numero valido
+			view.showError("No se ha introducido un numero de palabras valido");
+			return -1;
+		}
+		int palabrasEncontradas = model.leerLongitudes(view.getFichero1().getText(), longitud);
+
+		// Muestra palabras encontradass
+		if (palabrasEncontradas != 0) {
+			// Se han encontrado
+			view.getTextArea().setText("Se han localizado " + palabrasEncontradas + " palabras con más de " + longitud
+					+ " caracteres en el fichero " + view.getFichero1().getText());
+		} else {
+			// No se han encontrado palabras
+			view.showError("Se han encontrado 0 palabras con " + longitud + " caracteres");
+		}
+
+		return 1;
+	}
+
 }

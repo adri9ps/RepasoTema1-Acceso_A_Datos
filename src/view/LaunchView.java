@@ -18,6 +18,14 @@ public class LaunchView extends JFrame {
 		return btn_copiar;
 	}
 
+	public JTextField getTxt_nuevo() {
+		return txt_nuevo;
+	}
+
+	public void setTxt_nuevo(JTextField txt_nuevo) {
+		this.txt_nuevo = txt_nuevo;
+	}
+
 	public void setBtn_copiar(JButton btn_copiar) {
 		this.btn_copiar = btn_copiar;
 	}
@@ -28,6 +36,14 @@ public class LaunchView extends JFrame {
 	private JTextField txt_id;
 	private JLabel lblTtulo;
 	private JTextField txt_titulo;
+	public JButton getBtnLongitud() {
+		return btnLongitud;
+	}
+
+	public void setBtnLongitud(JButton btnLongitud) {
+		this.btnLongitud = btnLongitud;
+	}
+
 	private JLabel lblNewLabel_1;
 	public JTextField getTxt_id() {
 		return txt_id;
@@ -96,13 +112,43 @@ public class LaunchView extends JFrame {
 	private JTextField txt_autor;
 	private JLabel lblNewLabel_2;
 	private JTextField txt_anyo;
+	public JTextField getTxt_long() {
+		return txt_long;
+	}
+
+	public void setTxt_long(JTextField txt_long) {
+		this.txt_long = txt_long;
+	}
+
 	private JLabel lblNewLabel_3;
 	private JTextField txt_editor;
 	private JLabel lblNewLabel_4;
 	private JTextField txt_paginas;
+	public JButton getBtn_ModificarPags() {
+		return btn_ModificarPags;
+	}
+
+	public void setBtn_ModificarPags(JButton btn_ModificarPags) {
+		this.btn_ModificarPags = btn_ModificarPags;
+	}
+
 	private JButton btn_enviar;
 	private JButton btn_recu;
 	private JButton btn_MostrarLibros;
+	private JButton btn_ModificarPags;
+	private JLabel txt_longitud;
+	public JTextField getTxt_nuevas() {
+		return txt_nuevo;
+	}
+
+	public void setTxt_nuevas(JTextField txt_nuevas) {
+		this.txt_nuevo = txt_nuevas;
+	}
+
+	private JTextField txt_long;
+	private JButton btnLongitud;
+	private JLabel lblNewLabel_5;
+	private JTextField txt_nuevo;
 	
 	public LaunchView() {
 		
@@ -143,6 +189,16 @@ public class LaunchView extends JFrame {
 		panel.add(label_pal);
 		panel.add(palabra);
 		panel.add(primera);
+		
+		txt_longitud = new JLabel("Longitud:");
+		panel.add(txt_longitud);
+		
+		txt_long = new JTextField();
+		panel.add(txt_long);
+		txt_long.setColumns(10);
+		
+		btnLongitud = new JButton("Longitud");
+		panel.add(btnLongitud);
 		panel.add(scroll);
 		
         // Añadimos el JPanel al JFrame
@@ -156,42 +212,49 @@ public class LaunchView extends JFrame {
         
         txt_id = new JTextField();
         panel_1.add(txt_id);
-        txt_id.setColumns(10);
+        txt_id.setColumns(5);
         
         lblTtulo = new JLabel("Título:");
         panel_1.add(lblTtulo);
         
         txt_titulo = new JTextField();
         panel_1.add(txt_titulo);
-        txt_titulo.setColumns(10);
+        txt_titulo.setColumns(5);
         
         lblNewLabel_1 = new JLabel("Autor:");
         panel_1.add(lblNewLabel_1);
         
         txt_autor = new JTextField();
         panel_1.add(txt_autor);
-        txt_autor.setColumns(10);
+        txt_autor.setColumns(5);
         
         lblNewLabel_2 = new JLabel("Anyo:");
         panel_1.add(lblNewLabel_2);
         
         txt_anyo = new JTextField();
         panel_1.add(txt_anyo);
-        txt_anyo.setColumns(10);
+        txt_anyo.setColumns(5);
         
         lblNewLabel_3 = new JLabel("Editor:");
         panel_1.add(lblNewLabel_3);
         
         txt_editor = new JTextField();
         panel_1.add(txt_editor);
-        txt_editor.setColumns(10);
+        txt_editor.setColumns(5);
         
-        lblNewLabel_4 = new JLabel("Num paginas:");
+        lblNewLabel_4 = new JLabel("Pags:");
         panel_1.add(lblNewLabel_4);
         
         txt_paginas = new JTextField();
         panel_1.add(txt_paginas);
-        txt_paginas.setColumns(10);
+        txt_paginas.setColumns(5);
+        
+        lblNewLabel_5 = new JLabel("Nuevo:");
+        panel_1.add(lblNewLabel_5);
+        
+        txt_nuevo = new JTextField();
+        panel_1.add(txt_nuevo);
+        txt_nuevo.setColumns(5);
         
         btn_enviar = new JButton("Enviar");
         panel_1.add(btn_enviar);
@@ -201,6 +264,9 @@ public class LaunchView extends JFrame {
         
         btn_MostrarLibros = new JButton("Mostrar");
         panel_1.add(btn_MostrarLibros);
+        
+        btn_ModificarPags = new JButton("Modificar");
+        panel_1.add(btn_ModificarPags);
 		
 	}	
 	

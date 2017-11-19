@@ -20,6 +20,7 @@ public class GestionDatos {
 	FileInputStream fis;
 	FileOutputStream fos;
 	int numBytes;
+	ArrayList<Libro> todos = new ArrayList<Libro>();
 
 	public GestionDatos() {
 
@@ -164,10 +165,11 @@ public class GestionDatos {
 		return 1;
 
 	}
-	public Libro recuperar_Libro(String identificador) throws FileNotFoundException, IOException{
-		
+
+	public Libro recuperar_Libro(String identificador) throws FileNotFoundException, IOException {
+
 		File ficheroLibro = new File("InfoLibro" + identificador + ".txt");
-		if(!ficheroLibro.exists()){
+		if (!ficheroLibro.exists()) {
 			return null;
 		}
 		ObjectInputStream obj = new ObjectInputStream(new FileInputStream(ficheroLibro));
@@ -176,28 +178,79 @@ public class GestionDatos {
 			lib_recuperado = (Libro) obj.readObject();
 		} catch (ClassNotFoundException e) {
 			return null;
-			
+
 		}
 		obj.close();
 		return lib_recuperado;
-		
+
 	}
-	
-	public ArrayList<Libro> recuperar_todos() throws FileNotFoundException, IOException{
-		ArrayList<Libro> todos = new ArrayList<Libro>();
+
+	public ArrayList<Libro> recuperar_todos() throws FileNotFoundException, IOException {
+
 		File carpeta = new File(".");
-		String [] archivos = carpeta.list();
-		
+		String[] archivos = carpeta.list();
+
 		for (int i = 0; i < archivos.length; i++) {
-			if (archivos [i].startsWith("InfoLibro")){
-				String id = archivos[i].substring(9, archivos[i].length()-4);
+			if (archivos[i].startsWith("InfoLibro")) {
+				String id = archivos[i].substring(9, archivos[i].length() - 4);
 				System.out.println(id);
 				todos.add(recuperar_Libro(id));
 			}
-			
+
+		}
+
+		return todos;
+
+	}
+
+	// #EJ1 Metodo encargado de eliminar el anterior libro
+	public int eliminarLibro(Libro lb) {
+		//Creamos fichero
+		File nombreFichero = new File("InfoLibro" + lb.getId_libro() + ".txt");
+		
+		//Comprobamos que existe
+		if (!nombreFichero.exists()) {
+			//No existe
+			return -3;
 		}
 		
-		return todos;
+		//Procedemos a eliminar el fichero
+		if (!nombreFichero.delete()) {
+			//No se ha podido eliminar el anterior fichero
+			return -2;
+		}
 		
+		//Fichero del libro eliminado correctamente
+		return 1;
 	}
+	
+	// #EJ2 Metodo para buscar palabras con una x longitud
+	public int leerLongitudes (String file, int longitud) throws IOException{
+		
+		//Abrimos el nuevo archivo
+		BufferedReader archivo = abrirFichero(file);
+
+		//Creamos variables para contener el contador y la palabra temp
+		int contador = 0;
+		String palabra;
+		
+		//Leemos cada linea
+		while ((palabra = archivo.readLine()) != null){
+			
+			//Si la palabra tiene menos de la longitud introducida por el usuario, cuentala!
+			if (palabra.length() > longitud) {
+				//Palabra válida
+				contador++;
+			}
+		}
+		
+		//Cerramos archivo
+		archivo.close();
+		
+		return contador;
+	}
+	
+
+
+
 }
